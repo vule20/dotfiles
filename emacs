@@ -7,13 +7,16 @@
 (require 'package)
 
 ;; Adds the Melpa archive to the list of available repositories
-
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/"))
 (add-to-list 'package-archives
              '("melpa-stable" . "https://stable.melpa.org/packages/"))
 
-
 ;; Initializes the package infrastructure
 (package-initialize)
+
+;; Set up the package-quickstart feature for faster startup
+(setq package-quickstart t)
 
 ;; If there are no archived package contents, refresh them
 (when (not package-archive-contents)
@@ -31,6 +34,8 @@
     blacken                         ;; Black formatting on save
     magit                           ;; Git integration
     material-theme                  ;; Theme
+    auto-highlight-symbol
+    auto-complete
     )
   )
 
@@ -47,7 +52,8 @@
 
 (setq inhibit-startup-message t)  ;; Hide the startup message
 (load-theme 'material t)          ;; Load material theme
-(global-linum-mode t)             ;; Enable line numbers globally
+;; (global-linum-mode t)             ;; Enable line numbers globally
+(global-display-line-numbers-mode 1)
 
 ;; ====================================
 ;; DEVELOPMENT SETUP
@@ -145,11 +151,11 @@
 (setq python-shell-interpreter "ipython"
       python-shell-interpreter-args "-i --simple-prompt")
 
-;; set link for to env for python IDE
-(setq python-shell-interpreter "/home/vudle/anaconda3/envs/py310/bin/python3")
-(setq python-shell-interpreter-args "-i")
-(require 'pyvenv)
-(pyvenv-activate "/home/vudle/anaconda3/envs/py310")
+;; ;; set link for to env for python IDE
+;; (setq python-shell-interpreter "/home/vudle/anaconda3/envs/py310/bin/python3")
+;; (setq python-shell-interpreter-args "-i")
+;; (require 'pyvenv)
+;; (pyvenv-activate "/home/vudle/anaconda3/envs/py310")
 
 (defun file-header ()
   "Add a header to Python files."
@@ -268,3 +274,16 @@
 
 (add-hook 'LaTex-mode-hook 'flyspell-mode)
 (add-hook 'TeX-mode-hook 'flyspell-mode)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(auctex auto-complete py-autopep8 material-theme magit flycheck elpy ein blacken better-defaults auto-highlight-symbol)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
