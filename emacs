@@ -217,12 +217,6 @@
 
 (add-hook 'before-save-hook 'insert-update-header)
 
-;;;;;;;;;;; LaTex configuration begins ;;;;;;;;;;
-;; Install AUCTeX if not already installed
-(unless (package-installed-p 'auctex)
-  (package-refresh-contents)
-  (package-install 'auctex))
-
 (defun clean-latex-commands ()
   "Run bash script to remove Latex log files."
   (interactive)
@@ -234,56 +228,3 @@
   )
 
 (global-set-key (kbd "C-c C-x C-c") 'clean-latex-commands)
-
-(defun make-latex-commands ()
-  "Run a Bash script to compile pdflatex."
-  (interactive)
-  (when (or (eq major-mode 'tex-mode)
-	    (eq major-mode 'latex-mode))
-    (setq latex-file-name (file-name-nondirectory buffer-file-name))
-    (setq latex-file-name (concat "" latex-file-name ""))
-    (setq filename (file-name-sans-extension latex-file-name) )
-  
-    (shell-command (format "pdflatex -interaction=nonstopmode %s.tex" filename))
-    ;; (message (buffer-name (current-buffer)))
-    (when (search-forward-regexp "bibliography{" nil t)
-      (message "creating bibliography")
-      (shell-command (format "bibtex %s.aux" filename)))
-    (when (search-forward "\\makeindex" nil t)
-      (message "creating bibliography")
-      (shell-command (format "makeindex %s" filename)))
-    
-    (shell-command (format "pdflatex -interaction=nonstopmode '%s'.tex" filename))
-    (shell-command (format "pdflatex -interaction=nonstopmode '%s'.tex" filename))
-    (message "Compiled PDFLaTex successfully")))
-
-(global-set-key (kbd "C-c l") 'make-latex-commands)
-
-
-(defun insert-latex-image-from-clipboard ()
-  "Take and save the image taken from clipboard and insert the snippet in the current buffer."
-  (interactive)
-  (setq output (shell-command-to-string "clipboard.py"))
-  (when (or (eq major-mode 'tex-mode)
-	    (eq major-mode 'latex-mode))
-    (insert output)
-    (message "Inserted image and snippet from clipboard"))
-  )
-
-(global-set-key (kbd "C-c i") 'insert-latex-image-from-clipboard)
-
-(add-hook 'LaTex-mode-hook 'flyspell-mode)
-(add-hook 'TeX-mode-hook 'flyspell-mode)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(auctex auto-complete py-autopep8 material-theme magit flycheck elpy ein blacken better-defaults auto-highlight-symbol)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
