@@ -1,0 +1,5 @@
+{
+  "files.autoSave": "afterDelay",
+  "prettier.printWidth": 90,
+  "prettier.tabWidth": 2
+}

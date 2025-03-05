@@ -1,0 +1,41 @@
+## START GITPOD INTEGRATION
+## This section is managed by Gitpod. Any manual changes will be lost.
+Include "code_gitpod.d/config"
+## END GITPOD INTEGRATION
+
+Host github.com
+  AddKeysToAgent yes
+  UseKeychain yes
+  IdentityFile ~/.ssh/id_rsa
+
+Host *
+  ServerAliveInterval 60
+
+Host laptop-home
+  HostName 192.168.28.72
+  User vule
+
+Host myproxyserver1
+	 User ubuntu
+	 Hostname ec2-3-19-61-114.us-east-2.compute.amazonaws.com
+	 IdentityFile ~/workspace/keys/anthony_vule_aws.pem
+
+
+Host VuLe-UMass-Desktop
+	 User vule
+	 Hostname server.cloud-tools.us
+
+Host VuLe-UMass-Desktop-local
+	 User vule
+	 Hostname 192.168.1.200
+	 
+Host unity
+	 Hostname unity.rc.umass.edu
+	 User vdle_umass_edu
+	 ForwardAgent yes
+	 IdentityFile ~/.ssh/id_ed25519
+
+Host uri-cpu011.unity.rc.umass.edu
+	 User vdle_umass_edu
+	 IdentityFile ~/.ssh/id_ed25519
+	 ProxyJump unity
