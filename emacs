@@ -1,26 +1,24 @@
 ;; .emacs
 
-;; ===================================
-;; MELPA Package Support
-;; ===================================
-;; Enables packaging support
 (require 'package)
 
 (setq package-check-signature nil)
 
-;; Adds the Melpa archive to the list of available repositories
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives
-             '("melpa-stable" . "https://stable.melpa.org/packages/"))
+;; Add MELPA repositories
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 
-;; Set up the package-quickstart feature for faster startup
-;; (setq package-quickstart t)
-(package-quickstart-refresh)
+;; Initialize the package system
+(unless package--initialized
+  (package-initialize))
 
-;; If there are no archived package contents, refresh them
-(when (not package-archive-contents)
+;; Refresh package contents if needed
+(unless package-archive-contents
   (package-refresh-contents))
+
+;; Optionally refresh quickstart cache (Emacs 27+)
+;; (package-quickstart-refresh)
+
 
 ;; Installs packages
 ;;
@@ -49,8 +47,8 @@
 ;; (global-linum-mode t)             ;; Enable line numbers globally
 (global-display-line-numbers-mode 1)
 
-(setq-default system-name "UMassAmherst")
-(setq-default user-full-name "VuLe")
+(setq-default system-name "UMass Amherst")
+(setq-default user-full-name "Vu Le")
 
 (setq-default author (concat user-full-name "@" system-name)) 
 (setq-default editor (concat user-full-name "@" system-name))
@@ -133,7 +131,7 @@
 		      modified-time
 		      "\nLast modified by: "
 		      editor
-		      "\nLicense: © Copyright 2022-2024, Vu Le"
+		      "\nLicense: © Copyright 2025, Vu Le"
 		      "\nDesc:"
 		      "\n\"\"\"\n\n")))
     (when (or (eq major-mode 'tex-mode)
@@ -172,17 +170,31 @@
                (replace-match (concat "Last modified by: " author))))
 	))))
 
+
 (add-hook 'before-save-hook 'insert-update-header)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ispell-dictionary nil)
  '(package-selected-packages
-   '(auto-complete auto-highlight-symbol material-theme gnu-elpa-keyring-update flycheck elpy better-defaults)))
+   '(blacken dracula-theme verilog-ext verilog-ts-mode yaml yaml-mode matlab-mode auto-complete auto-highlight-symbol material-theme gnu-elpa-keyring-update flycheck elpy better-defaults)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+(setq tab-width 4)
+(setq verilog-indent-level 4)
+(setq verilog-cexp-indent 4)
+(setq comment-column 4)
+
+;; Make sure blacken is installed & loaded first:
+(require 'blacken)
+
+(add-hook 'python-mode-hook #'blacken-mode)        ;; classic python-mode
+(when (boundp 'python-ts-mode)                      ;; Emacs 29 tree-sitter
+  (add-hook 'python-ts-mode-hook #'blacken-mode))
